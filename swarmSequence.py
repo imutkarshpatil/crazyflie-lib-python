@@ -11,17 +11,17 @@ URI1 = 'radio://0/80/250K/E7E7E7E7E7'
 
 
 z0 = 0.4
-z = 1.0
+z = 1.5
 
-x0 = 0.7
+x0 = 0
 
-y0 = -1.0
+y0 = 0
 
 
 #    x   y   z  time
 sequence1 = [
     (x0, y0, z0, 3.0),
-    (x0, y0, z, 30.0),
+    (x0, y0, z, 5.0),
     (x0, y0, z0, 3.0),
 ]
 
@@ -128,13 +128,14 @@ def run_sequence(scf, sequence):
         cf.param.set_value('flightmode.posSet', '1')
 
         take_off(cf, sequence[0])
-        for position in sequence:
-            print('Setting position {}'.format(position))
-            end_time = time.time() + position[3]
-            while time.time() < end_time:
-                cf.commander.send_setpoint(position[1], position[0], 0,
-                                           int(position[2] * 1000))
-                time.sleep(0.1)
+        # for position in sequence:
+        #     print('Setting position {}'.format(position))
+        #     end_time = time.time() + position[3]
+        #     while time.time() < end_time:
+        #         cf.commander.send_setpoint(position[1], position[0], 0,
+        #                                    int(position[2] * 1000))
+        #         time.sleep(0.1)
+        time.sleep(1)
         land(cf, sequence[-1])
     except Exception as e:
         print(e)
@@ -150,7 +151,7 @@ if __name__ == '__main__':
         # probably not needed. The Kalman filter will have time to converge
         # any way since it takes a while to start them all up and connect. We
         # keep the code here to illustrate how to do it.
-        # swarm.parallel(reset_estimator)
+        swarm.parallel(reset_estimator)
 
         # The current values of all parameters are downloaded as a part of the
         # connections sequence. Since we have 10 copters this is clogging up
